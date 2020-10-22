@@ -29,6 +29,11 @@ const menu = [{
   key: 4,
   url: '#/gradebook',
   name: 'Calificaciones'
+},
+{
+  key: 5,
+  url: '#/studentsubject',
+  name: 'Asignar asignaturas'
 }];
 
 export const SchoolContainer = ({ children }) => {

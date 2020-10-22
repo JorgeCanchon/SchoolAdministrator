@@ -36,7 +36,6 @@ export const DeletePerson = async id => {
 
 export const AddPerson = async person => {
   try {
-    console.log(constants.PERSON.POST, person);
     let result = await axios.post(constants.PERSON.POST, person);
     let data = await result;
     return data;

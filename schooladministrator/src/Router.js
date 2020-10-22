@@ -38,6 +38,10 @@ const routes = [
       path: '/subject',
       component: loadable(() => import('./pages/subject'))
     },
+    {
+      path: '/studentsubject',
+      component: loadable(() => import('./pages/studentsubject'))
+    },
 ];
 
 class Router extends React.Component {

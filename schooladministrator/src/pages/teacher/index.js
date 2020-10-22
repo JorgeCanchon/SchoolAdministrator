@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Popconfirm, message } from 'antd';
+import { Popconfirm, message, Spin } from 'antd';
 import CRUDTable from '../../components/CRUDTable';
 import { Helmet } from 'react-helmet';
 import { GetTeacher, AddPerson } from '../../services/personRequest';
@@ -59,6 +59,7 @@ export const Teacher = () => {
   );
 
   const getData = async () => {
+    setloading(true);
     let data = await GetTeacher();
     switch(data.status)
     {
@@ -106,6 +107,11 @@ export const Teacher = () => {
 
   const onVisible = status => setVisible(status);
 
+  if (loading)
+    return (
+      <Fragment>
+        <Spin />
+      </Fragment>);
   return (
     <Fragment>
       <Helmet title='Profesor' />

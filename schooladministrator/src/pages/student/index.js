@@ -69,6 +69,7 @@ export const Student = () => {
   );
 
   const getData = async () => {
+    setloading(true);
     let data = await GetStudent();
     switch (data.status) {
       case 200:
@@ -83,6 +84,7 @@ export const Student = () => {
         message.error('Ocurrio un error al consultar los datos');
         break;
     }
+    setloading(false);
   }
 
   const handleDelete = async key => {
