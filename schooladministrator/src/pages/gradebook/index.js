@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Table, message } from 'antd';
+import { Table, message, Spin } from 'antd';
 import { GetReportGradebook } from '../../services/subjectRequest';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { setGradebooks } from '../../redux/gradebook/index';
@@ -48,6 +48,7 @@ export const GradeBook = () => {
   ];
   
   const dispatch = useDispatch();
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -60,7 +61,9 @@ export const GradeBook = () => {
     shallowEqual
   );
 
-  const getData = async () => {
+  const getData = async () => 
+  {
+    setloading(true);
     let data = await GetReportGradebook();
     switch(data.status)
     {
@@ -75,8 +78,14 @@ export const GradeBook = () => {
         message.error('Ocurrio un error al consultar los datos');
         break;
     }
+    setloading(false);
   }
 
+  if (loading)
+  return (
+    <Fragment>
+      <Spin />
+    </Fragment>);
   return (
     <Fragment>
       <Helmet title='Calificaciones' />

@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
+
+const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
@@ -10,7 +12,8 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-export const FormSubject = ({ onFinish }) => {
+export const FormSubject = ({ onFinish, teacher }) => {
+
   const [form] = Form.useForm();
 
   const onReset = () => {
@@ -25,6 +28,22 @@ export const FormSubject = ({ onFinish }) => {
         </Form.Item>
         <Form.Item name="nombre" label="Nombre:" rules={[{ required: true }]}>
           <Input />
+        </Form.Item>
+        <Form.Item
+          name="idprofesor"
+          label="Profesor:"
+          hasFeedback
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Seleccione...">
+            {
+              teacher.map(x => (
+                <Option key={x.id} value={x.id}>
+                  {`${x.identificacion} - ${x.nombreProfesor}`}
+                </Option>
+              ))
+            }
+          </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit" style={{ margin: '25px' }}>

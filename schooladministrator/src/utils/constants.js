@@ -8,5 +8,8 @@ export const PERSON = {
 }
 
 export const SUBJECT = {
-  GET_REPORT: `${API_URL}asignatura/reportGradebook` 
+  GET_REPORT: `${API_URL}asignatura/reportGradebook`,
+  GET_SUBJECT: `${API_URL}asignatura`,
+  POST: `${API_URL}asignatura`,
+  POST_STUDENT_SUBJECT: `${API_URL}asignatura/alumnoAsignatura`,
 }
