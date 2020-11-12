@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Subject from '../pages/subject';
 import * as constants from '../utils/constants';
 
 export const GetReportGradebook = async () => {
@@ -44,7 +43,6 @@ export const InsertSubject = async subject => {
 export const InsertStudentSubject = async entity => {
   try 
   {
-    console.log(entity);
     let result = await axios.post(constants.SUBJECT.POST_STUDENT_SUBJECT, entity);
     let data = await result;
     return data;

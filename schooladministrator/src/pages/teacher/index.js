@@ -34,18 +34,41 @@ export const Teacher = () => {
       title: 'Editar',
       dataIndex: 'Editar',
       render: (text, record) =>
-        teacher.length >= 1 ? (
-          <Popconfirm title="¿Esta seguro de eliminar?" onConfirm={() => console.log(record.key)}>
-            <a>Editar</a>
-          </Popconfirm>
-        ) : null,
+      teacherState.length >= 1 ? ( <a onClick={() => 
+        { 
+          const { 
+            identificacion,
+            nombre,
+            apellido,
+            direccion,
+            rol,
+            id,
+            telefono,
+            edad
+          } = record;
+
+          setTeacherSelected({
+            identificacion,
+            nombre,
+            apellido,
+            direccion,
+            rol,
+            id,
+            telefono,
+            edad
+          });
+
+          onVisibleEdit(true);
+        }}>Editar</a>) : null,
     }
   ];
 
   const dispatch = useDispatch();
   const [loading, setloading] = useState(false);
   const [teacherState, setTeacherState] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleEdit, setVisibleEdit] = useState(false);
+  const [teacherSelected, setTeacherSelected] = useState(undefined);
 
   useEffect(() => {
     getData();
@@ -78,7 +101,7 @@ export const Teacher = () => {
     setloading(false);
   }
 
-  const handleOk = async e => {
+  const handleOkAdd = async e => {
     let entity = {
       "identificacion": parseInt(e.identificacion),
       "nombre": e.nombre,
@@ -102,10 +125,42 @@ export const Teacher = () => {
       default:
           message.error('Ocurrio un error al agregar el profesor');
     }
-    setVisible(false);
+    setVisibleAdd(false);
   }
 
-  const onVisible = status => setVisible(status);
+  const handleOkEdit = async e => {
+    let entity = {
+      'id': teacherSelected.id,
+      "identificacion": parseInt(e.identificacion),
+      "nombre": e.nombre,
+      "apellido": e.apellido,
+      "edad": parseInt(e.edad),
+      "direccion": e.direccion,
+      "telefono": parseInt(e.telefono),
+      "rol": 0
+    };
+
+    console.log(entity);
+    // let res = await AddPerson(entity);
+
+    // switch(res.status){
+    //   case 200:
+    //   case 201:
+    //     res = { id: res.data.payload, ...entity, key: res.data.payload, nombreprofesor: `${entity.nombre} ${entity.apellido}`}
+    //     setTeacherState([...teacherState, res]);
+    //     dispatch(addTeacher(res));
+    //     message.success('Profesor agregado con éxito');
+    //     break;
+    //   default:
+    //       message.error('Ocurrio un error al agregar el profesor');
+    // }
+    setVisibleEdit(false);
+  }
+
+  
+  const onVisibleAdd = status => setVisibleAdd(status);
+
+  const onVisibleEdit = status => setVisibleEdit(status);
 
   if (loading)
     return (
@@ -118,11 +173,14 @@ export const Teacher = () => {
       <h1>Profesor</h1>
       <CRUDTable
         columns={columns}
-        Form={<FormPerson onFinish={handleOk.bind(this)} />}
+        FormAdd={<FormPerson onFinish={handleOkAdd.bind(this)} />}
+        FormEdit={<FormPerson onFinish={handleOkEdit.bind(this)} data={teacherSelected} />}
         state={teacherState}
         loading={loading}
-        visible={visible}
-        onVisible={onVisible.bind(this)}
+        visibleAdd={visibleAdd}
+        visibleEdit={visibleEdit}
+        onVisibleAdd={onVisibleAdd.bind(this)}
+        onVisibleEdit={onVisibleEdit.bind(this)}
       />
     </Fragment>
   )

@@ -71,10 +71,6 @@ export const Subject = () => {
     setloading(false);
     getDataTeacher();
   }
-
-  useEffect(() => {
-    getData();
-  }, []);
   
   const getDataTeacher = async () => 
   {

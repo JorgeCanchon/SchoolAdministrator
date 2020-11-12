@@ -107,8 +107,11 @@ export const FormStudentSubject = () => {
       case 201:
         message.success('Alumno asignado con éxito');
         break;
+      case 202:
+        message.warning(res.data.message);
+        break;  
       default:
-          message.error('Ocurrio un error al asignar la asignatura');
+        message.error('Ocurrio un error al asignar la asignatura');
     }
     setloading(false);
   }

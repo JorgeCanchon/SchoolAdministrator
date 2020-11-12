@@ -1,12 +1,15 @@
+//Definicion de acciones
 export const ADD_STUDENT = 'ADD_STUDENT';
 export const SET_STUDENTS = 'SET_STUDENTS';
 export const DELETE_STUDENT = 'DELETE_STUDENT';
 export const UPDATE_STUDENT = 'UPDATE_STUDENT';
 
+//Estado inicial
 export const initialState = {
-  teacher: []
+  student: []
 };
 
+//Función reductora
 export const reducerStudent = (state = initialState, action) => {
   switch(action.type)
   {
@@ -48,6 +51,7 @@ export const reducerStudent = (state = initialState, action) => {
   }
 }
 
+//Creadores de acciones
 export const addStudent = student => ({
   type: ADD_STUDENT,
   student
