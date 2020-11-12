@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { Table, Button, Spin } from 'antd';
 import MyModal from '../Modal';
 
-export const CRUDTable = ({ columns, Form, state, loading, visible, onVisible }) => {
+export const CRUDTable = ({ columns, FormAdd, FormEdit, state, 
+  loading, visibleAdd, onVisibleAdd, visibleEdit, onVisibleEdit }) => {
 
   if (loading)
     return (
@@ -11,14 +12,20 @@ export const CRUDTable = ({ columns, Form, state, loading, visible, onVisible })
       </Fragment>);
   return (
     <Fragment>
-      <Button onClick={() => onVisible(true)} type='primary' style={{ marginBottom: 16 }}>
+      <Button onClick={() => onVisibleAdd(true)} type='primary' style={{ marginBottom: 16 }}>
         Agregar
       </Button>
       <MyModal
         title='Agregar'
-        content={Form}
-        visible={visible}
-        handleCancel={()  => onVisible(false)}
+        content={FormAdd}
+        visible={visibleAdd}
+        handleCancel={()  => onVisibleAdd(false)}
+      />
+      <MyModal
+        title='Editar'
+        content={FormEdit}
+        visible={visibleEdit}
+        handleCancel={()  => onVisibleEdit(false)}
       />
       <Table columns={columns} dataSource={state} rowKey="id" /> 
     </Fragment>

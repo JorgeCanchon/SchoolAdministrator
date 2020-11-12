@@ -34,18 +34,39 @@ export const Student = () => {
       title: 'Editar',
       dataIndex: 'Editar',
       render: (text, record) =>
-        studentState.length >= 1 ? (
-          <Popconfirm title="¿Esta seguro de eliminar?" onConfirm={() => handleDelete(record.key)}>
-            <a>Editar</a>
-          </Popconfirm>
-        ) : null,
+        studentState.length >= 1 ? ( <a onClick={() => 
+          { 
+            const { 
+              identificacion,
+              nombre,
+              apellido,
+              direccion,
+              rol,
+              id,
+              telefono,
+              edad
+            } = record;
+
+            setStudentSelected({
+              identificacion,
+              nombre,
+              apellido,
+              direccion,
+              rol,
+              id,
+              telefono,
+              edad
+            });
+
+            onVisibleEdit(true);
+          }}>Editar</a>) : null,
     },
     {
       title: 'Eliminar',
       dataIndex: 'Eliminar',
       render: (text, record) =>
         studentState.length >= 1 ? (
-          <Popconfirm title="¿Esta seguro de eliminar?" onConfirm={() => handleDelete(record.key)}>
+          <Popconfirm title='¿Esta seguro de eliminar?' onConfirm={() => handleDelete(record.key)}>
             <a>Eliminar</a>
           </Popconfirm>
         ) : null,
@@ -55,7 +76,9 @@ export const Student = () => {
   const dispatch = useDispatch();
   const [loading, setloading] = useState(false);
   const [studentState, setStudentState] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleEdit, setVisibleEdit] = useState(false);
+  const [studentSelected, setStudentSelected] = useState(undefined);
 
   useEffect(() => {
     getData();
@@ -98,7 +121,7 @@ export const Student = () => {
         dispatch(deleteStudent(key));
         break;
       case 202:
-        message.error(res.data.message);
+        message.warning(res.data.message);
         break;
       default:
         message.error('Ocurrio un error al eliminar el estudiante');
@@ -107,15 +130,15 @@ export const Student = () => {
     setloading(false);
   }
 
-  const handleOk = async e => {
+  const handleOkAdd = async e => {
     let entity = {
-      "identificacion": parseInt(e.identificacion),
-      "nombre": e.nombre,
-      "apellido": e.apellido,
-      "edad": parseInt(e.edad),
-      "direccion": e.direccion,
-      "telefono": parseInt(e.telefono),
-      "rol": 1
+      'identificacion': parseInt(e.identificacion),
+      'nombre': e.nombre,
+      'apellido': e.apellido,
+      'edad': parseInt(e.edad),
+      'direccion': e.direccion,
+      'telefono': parseInt(e.telefono),
+      'rol': 1
     };
 
     let res = await AddPerson(entity);
@@ -131,10 +154,41 @@ export const Student = () => {
       default:
           message.error('Ocurrio un error al agregar el estudiante');
     }
-    setVisible(false);
+    setVisibleAdd(false);
   }
 
-  const onVisible = status => setVisible(status);
+  const handleOkEdit = async e => {
+    let entity = {
+      'id': studentSelected.id,
+      'identificacion': parseInt(e.identificacion),
+      'nombre': e.nombre,
+      'apellido': e.apellido,
+      'edad': parseInt(e.edad),
+      'direccion': e.direccion,
+      'telefono': parseInt(e.telefono),
+      'rol': 1
+    };
+
+    console.log(entity);
+    // let res = await AddPerson(entity);
+
+    // switch(res.status){
+    //   case 200:
+    //   case 201:
+    //     res = { id: res.data.payload, ...entity, key: res.data.payload, nombreestudiante: `${entity.nombre} ${entity.apellido}`}
+    //     setStudentState([...studentState, res]);
+    //     dispatch(addStudent(res));
+    //     message.success('Estudiante agregado con éxito');
+    //     break;
+    //   default:
+    //       message.error('Ocurrio un error al agregar el estudiante');
+    // }
+    setVisibleEdit(false);
+  }
+
+  const onVisibleAdd = status => setVisibleAdd(status);
+
+  const onVisibleEdit = status => setVisibleEdit(status);
 
   if (loading)
     return (
@@ -147,11 +201,14 @@ export const Student = () => {
       <h1>Estudiante</h1>
       <CRUDTable
         columns={columns}
-        Form={<FormPerson onFinish={handleOk.bind(this)} />}
+        FormAdd={<FormPerson onFinish={handleOkAdd.bind(this)} />}
+        FormEdit={<FormPerson onFinish={handleOkEdit.bind(this)} data={studentSelected} />}
         state={studentState}
         loading={loading}
-        visible={visible}
-        onVisible={onVisible.bind(this)}
+        visibleAdd={visibleAdd}
+        visibleEdit={visibleEdit}
+        onVisibleAdd={onVisibleAdd.bind(this)}
+        onVisibleEdit={onVisibleEdit.bind(this)}
       />
     </Fragment>
   )
