@@ -44,3 +44,14 @@ export const AddPerson = async person => {
     return { status: 500 };
   }
 }
+
+export const UpdatePerson = async person => {
+  try {
+    let result = await axios.put(constants.PERSON.PUT, person);
+    let data = await result;
+    return data;
+  } catch (e) {
+    console.log(e);
+    return { status: 500 };
+  }
+}

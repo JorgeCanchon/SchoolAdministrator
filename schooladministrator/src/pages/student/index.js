@@ -2,9 +2,9 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Popconfirm, message, Spin } from 'antd';
 import CRUDTable from '../../components/CRUDTable';
 import { Helmet } from 'react-helmet';
-import { GetStudent, DeletePerson, AddPerson } from '../../services/personRequest';
+import { GetStudent, DeletePerson, AddPerson, UpdatePerson } from '../../services/personRequest';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { setStudent, deleteStudent, addStudent } from '../../redux/student/index';
+import { setStudent, deleteStudent, addStudent, updateStudent } from '../../redux/student/index';
 import FormPerson from '../../components/FormPerson';
 
 export const Student = () => {
@@ -169,20 +169,22 @@ export const Student = () => {
       'rol': 1
     };
 
-    console.log(entity);
-    // let res = await AddPerson(entity);
+    let res = await UpdatePerson(entity);
 
-    // switch(res.status){
-    //   case 200:
-    //   case 201:
-    //     res = { id: res.data.payload, ...entity, key: res.data.payload, nombreestudiante: `${entity.nombre} ${entity.apellido}`}
-    //     setStudentState([...studentState, res]);
-    //     dispatch(addStudent(res));
-    //     message.success('Estudiante agregado con éxito');
-    //     break;
-    //   default:
-    //       message.error('Ocurrio un error al agregar el estudiante');
-    // }
+    switch(res.status){
+      case 200:
+      case 201:
+        const data = studentState.map(x => (
+          x.id === entity.id ? { ...entity, key: entity.id, nombreestudiante: `${entity.nombre} ${entity.apellido}` }
+          : x
+        ))
+        setStudentState(data);
+        dispatch(updateStudent(data));
+        message.success('Estudiante editado con éxito');
+        break;
+      default:
+          message.error('Ocurrio un error al editar el estudiante');
+    }
     setVisibleEdit(false);
   }
 

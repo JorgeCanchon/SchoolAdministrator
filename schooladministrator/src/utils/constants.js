@@ -4,7 +4,8 @@ export const PERSON = {
   GET_TEACHER: `${API_URL}persona/teacher`,
   GET_STUDENT: `${API_URL}persona/student`,
   DELETE: `${API_URL}persona`,
-  POST: `${API_URL}persona`
+  POST: `${API_URL}persona`,
+  PUT: `${API_URL}persona`
 }
 
 export const SUBJECT = {
