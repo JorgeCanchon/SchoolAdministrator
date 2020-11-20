@@ -2,9 +2,9 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Popconfirm, message, Spin } from 'antd';
 import CRUDTable from '../../components/CRUDTable';
 import { Helmet } from 'react-helmet';
-import { GetTeacher, AddPerson } from '../../services/personRequest';
+import { GetTeacher, AddPerson, UpdatePerson } from '../../services/personRequest';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { addTeacher, setTeachers } from '../../redux/teacher/index';
+import { addTeacher, setTeachers, updateTeacher } from '../../redux/teacher/index';
 import FormPerson from '../../components/FormPerson';
 
 export const Teacher = () => {
@@ -131,29 +131,31 @@ export const Teacher = () => {
   const handleOkEdit = async e => {
     let entity = {
       'id': teacherSelected.id,
-      "identificacion": parseInt(e.identificacion),
-      "nombre": e.nombre,
-      "apellido": e.apellido,
-      "edad": parseInt(e.edad),
-      "direccion": e.direccion,
-      "telefono": parseInt(e.telefono),
-      "rol": 0
+      'identificacion': parseInt(e.identificacion),
+      'nombre': e.nombre,
+      'apellido': e.apellido,
+      'edad': parseInt(e.edad),
+      'direccion': e.direccion,
+      'telefono': parseInt(e.telefono),
+      'rol': 0
     };
 
-    console.log(entity);
-    // let res = await AddPerson(entity);
+    let res = await UpdatePerson(entity);
 
-    // switch(res.status){
-    //   case 200:
-    //   case 201:
-    //     res = { id: res.data.payload, ...entity, key: res.data.payload, nombreprofesor: `${entity.nombre} ${entity.apellido}`}
-    //     setTeacherState([...teacherState, res]);
-    //     dispatch(addTeacher(res));
-    //     message.success('Profesor agregado con éxito');
-    //     break;
-    //   default:
-    //       message.error('Ocurrio un error al agregar el profesor');
-    // }
+    switch(res.status){
+      case 200:
+      case 201:
+        const data = teacherState.map(x => (
+          x.id === entity.id ? { ...entity, key: entity.id, nombreprofesor: `${entity.nombre} ${entity.apellido}` }
+          : x
+        ))
+        setTeacherState(data);
+        dispatch(updateTeacher(data));
+        message.success('Profesor editado con éxito');
+        break;
+      default:
+          message.error('Ocurrio un error al editar el Profesor');
+    }
     setVisibleEdit(false);
   }
 
